@@ -22,16 +22,10 @@ import CardActions from '@mui/material/CardActions'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
 import Select from '@mui/material/Select'
-
-
-// import DatePicker, { ReactDatePickerProps } from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
 import Icon from '../src/@core/components/icon';
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { FormHelperText } from '@mui/material';
-import { error } from 'console';
-
 
 interface ValuesState {
     password: string;
@@ -43,7 +37,7 @@ interface FormValues {
     firstName: string;
     lastName: string;
     country: string;
-    language: string;
+    language: string[];
     birthDate: Date | null;
     PhoneNo: string;
     userName: string
@@ -83,11 +77,6 @@ const schema = yup.object().shape({
         .string()
         .min(3, obj => showErrors('firstName', obj.value.length, obj.min))
         .required(),
-    // birthDate: yup
-    //     .date()
-    //     .nullable()
-    //     .max(new Date(), "Date of Birth cannot be in the future")
-    //     .required("Date of Birth is required"),
     PhoneNo: yup
         .string()
         .min(10, obj => showErrors('PhoneNo', obj.value.length, obj.min))
@@ -95,10 +84,6 @@ const schema = yup.object().shape({
         .required("Phone number is required"),
 
 })
-
-// const CustomInput = React.forwardRef<HTMLInputElement, ReactDatePickerProps>((props, ref) => {
-//     return <TextField fullWidth {...props} inputRef={ref} label='Birth Date' autoComplete='off' />;
-// });
 
 const FormLayoutsTabs: React.FC = () => {
     const {
@@ -122,6 +107,7 @@ const FormLayoutsTabs: React.FC = () => {
     const [value, setValue] = useState('personal-info');
     const [date, setDate] = useState<Date | null>(null);
     const [language, setLanguage] = useState<string[]>([]);
+    // const [language, setLanguage] = useState<string>('');
     const [values, setValues] = useState<ValuesState>({
         password: '',
         password2: '',
@@ -162,17 +148,12 @@ const FormLayoutsTabs: React.FC = () => {
         setValue('personal-info')
     };
     const handleNext = async () => {
-        // const isStepValid = await trigger();
-        // if (isStepValid) {
-        console.log("check")
-
         if (currentStep === 1) {
             setValue('account-details')
             setCurrentStep(2);
         } else if (currentStep === 2) {
             setCurrentStep(3);
         }
-        // }
     };
     const handlePrev = () => {
         if (currentStep === 2) {
@@ -259,8 +240,8 @@ const FormLayoutsTabs: React.FC = () => {
                                     <Controller
                                         name="language"
                                         control={control}
-                                        // defaultValue={[]}
-                                        defaultValue=''
+                                        defaultValue={[]}
+                                        // defaultValue=''
                                         render={({ field }) => (
                                             <FormControl fullWidth>
                                                 <InputLabel id='form-layouts-tabs-multiple-select-label'>Language</InputLabel>
